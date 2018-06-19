@@ -1,0 +1,9 @@
+<p> #{getName arkHolding}
+<p> #{getAddress arkHolding}
+
+$maybe balance <- arkBalance
+  <p>#{balance}
+$nothing
+  <p> Nothing
+
+    
