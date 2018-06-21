@@ -1,9 +1,13 @@
-<p> #{getName arkHolding}
-<p> #{getAddress arkHolding}
-
-$maybe balance <- arkBalance
-  <p>#{balance}
-$nothing
-  <p> Nothing
+<div>
+  <ul>
+    $forall holdingTuple
+    <- holdingTuples
+       <li>
+         <p>#{getHoldingName $ fst holdingTuple}
+         <p>#{getHoldingAddress $ fst holdingTuple}
+         $maybe balance <- snd holdingTuple
+           <p>#{balance}
+         $nothing
+           <p>Balance not available
 
     

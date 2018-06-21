@@ -9,8 +9,8 @@ import Data.Text
 
 data Ark = Ark
   { name :: Text,
-    balance :: Address -> IO (Maybe Text),
-    address :: Address
+    balance :: IO (Maybe Text),
+    address :: Text
   }
 
 instance Holding (Ark) where
@@ -18,13 +18,13 @@ instance Holding (Ark) where
   getAddress = address
   getBalance = balance
 
-getArkHolding :: Address -> Ark
+getArkHolding :: Text -> Ark
 getArkHolding addr
   = Ark { name = "Ark",
-          balance = _getArkBalance,
+          balance = getArkBalance,
           address = addr }
     where
-      _getArkBalance :: Address -> IO (Maybe Text)
-      _getArkBalance a = do
-        r <- get ("https://explorer.ark.io:8443/api/accounts?address=" ++ (unpack a))
+      getArkBalance :: IO (Maybe Text)
+      getArkBalance = do
+        r <- get ("https://explorer.ark.io:8443/api/accounts?address=" ++ (unpack addr))
         return $ (r ^? responseBody . key "account" . key "balance" . _String)
