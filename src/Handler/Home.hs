@@ -11,10 +11,12 @@ import Data.Map.Strict
 
 import Binding.Ark (getArkHolding)
 import Binding.Currency
+import Binding.Eth (getEthHolding)
 import Binding.SessionHolding
 
 getHoldings :: [NameAddress]
-getHoldings = [NameAddress { name = "ark", address = "AGDENwv5qXV2zfXQBh9nUdNesdX8Yyk7ow" }]
+getHoldings = [NameAddress { name = "ark", address = "AGDENwv5qXV2zfXQBh9nUdNesdX8Yyk7ow" },
+               NameAddress { name = "eth", address = "0xf4d5aDe921b09d4A2e05f45D26483fA5735c802C" }]
 
 getHoldingName :: IHolding -> Text
 getHoldingName (MkHolding a) = getName a
@@ -22,11 +24,12 @@ getHoldingName (MkHolding a) = getName a
 getHoldingAddress :: IHolding -> Text
 getHoldingAddress (MkHolding a) = getAddress a
 
-getHoldingBalance :: IHolding -> IO (Maybe Text)
+getHoldingBalance :: IHolding -> IO (Maybe Float)
 getHoldingBalance (MkHolding a) = getBalance a
 
 holdingMap :: Map Text (Text -> IHolding)
-holdingMap = Data.Map.Strict.fromList [("ark", (\addr -> packHolding $ getArkHolding addr))]
+holdingMap = Data.Map.Strict.fromList [("ark", (\addr -> packHolding $ getArkHolding addr)),
+                                       ("eth", (\addr -> packHolding $ getEthHolding addr))]
 
 getHomeR :: Handler Html
 getHomeR = do

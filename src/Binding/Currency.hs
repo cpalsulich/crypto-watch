@@ -7,7 +7,7 @@ data IHolding = forall a . Holding a => MkHolding a
 
 class Holding a where
   getName :: a -> Text
-  getBalance :: a -> IO (Maybe Text)
+  getBalance :: a -> IO (Maybe Float)
   getAddress :: a -> Text
 
 packHolding :: Holding a => a -> IHolding
