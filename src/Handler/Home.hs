@@ -10,13 +10,15 @@ import Data.Map.Strict
 --import qualified Web.ClientSession   as CS
 
 import Binding.Ark (getArkHolding)
+import Binding.Btc (getBtcHolding)
 import Binding.Currency
 import Binding.Eth (getEthHolding)
 import Binding.SessionHolding
 
 getHoldings :: [NameAddress]
 getHoldings = [NameAddress { name = "ark", address = "AGDENwv5qXV2zfXQBh9nUdNesdX8Yyk7ow" },
-               NameAddress { name = "eth", address = "0xf4d5aDe921b09d4A2e05f45D26483fA5735c802C" }]
+               NameAddress { name = "eth", address = "0xf4d5aDe921b09d4A2e05f45D26483fA5735c802C" },
+               NameAddress { name = "btc", address = "1GyT8JDvh5cTpsLTXbGtgNjiEgzAfoJpWf" }]
 
 getHoldingName :: IHolding -> Text
 getHoldingName (MkHolding a) = getName a
@@ -29,7 +31,8 @@ getHoldingBalance (MkHolding a) = getBalance a
 
 holdingMap :: Map Text (Text -> IHolding)
 holdingMap = Data.Map.Strict.fromList [("ark", (\addr -> packHolding $ getArkHolding addr)),
-                                       ("eth", (\addr -> packHolding $ getEthHolding addr))]
+                                       ("eth", (\addr -> packHolding $ getEthHolding addr)),
+                                       ("btc", (\addr -> packHolding $ getBtcHolding addr))]
 
 getHomeR :: Handler Html
 getHomeR = do
