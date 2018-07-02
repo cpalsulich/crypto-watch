@@ -1,0 +1,13 @@
+<tr>
+      <th>Name
+      <th>Address
+      <th>Balance
+    $forall holdingTuple
+    <- holdingTuples
+       <tr>
+         <td>#{getHoldingName $ fst holdingTuple}
+         <td>#{getHoldingAddress $ fst holdingTuple}
+         $maybe balance <- snd holdingTuple
+           <td>#{balance}
+         $nothing
+           <td>Balance not available

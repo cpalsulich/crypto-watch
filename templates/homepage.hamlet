@@ -1,4 +1,5 @@
 <div class="container-fluid">
+  <div>#{show vals}
   <table class="table">
     <tr>
       <th>Name
@@ -6,12 +7,10 @@
       <th>Balance
     $forall holdingTuple
     <- holdingTuples
-       <tr>
-         <td>#{getHoldingName $ fst holdingTuple}
-         <td>#{getHoldingAddress $ fst holdingTuple}
-         $maybe balance <- snd holdingTuple
-           <td>#{balance}
-         $nothing
-           <td>Balance not available
-
-    
+      <tr>
+        <td>#{getHoldingName $ fst holdingTuple}
+        <td>#{getHoldingAddress $ fst holdingTuple}
+        $maybe balance <- snd holdingTuple
+          <td>#{balance}
+        $nothing
+          <td>Balance not available
