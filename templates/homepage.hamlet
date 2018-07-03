@@ -1,5 +1,9 @@
 <div class="container-fluid">
-  <div>#{show vals}
+  <h3>Add tracked currency 
+  <form method=post action=@{HomeR} enctype=#{enctype}>
+    ^{optionWidget}
+    <button>Submit
+  <hr>
   <table class="table">
     <tr>
       <th>Name
