@@ -9,6 +9,7 @@
       <th>Name
       <th>Address
       <th>Balance
+      <th>Delete    
     $forall holdingTuple
     <- holdingTuples
       <tr>
@@ -18,3 +19,4 @@
           <td>#{balance}
         $nothing
           <td>Balance not available
+        <td onclick="deleteChoice('#{getHoldingName $ fst holdingTuple}', '#{getHoldingAddress $ fst holdingTuple}')">X

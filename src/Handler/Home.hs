@@ -6,6 +6,7 @@
 module Handler.Home where
 
 import Import
+import Data.List
 import Data.Map.Strict
 import Data.Aeson
 
@@ -61,7 +62,7 @@ extractBalances hs = sequence $ (fmap) (\h -> getHoldingBalance h) hs
 
 currencyChoiceAForm :: AForm Handler NameAddress
 currencyChoiceAForm = NameAddress
-    <$> areq (selectFieldList (zipWith (\a b -> (a, b)) (Data.Map.Strict.keys optionMap) (Data.Map.Strict.keys optionMap))) "" Nothing
+    <$> areq (selectFieldList (Data.List.zipWith (\a b -> (a, b)) (Data.Map.Strict.keys optionMap) (Data.Map.Strict.keys optionMap))) "" Nothing
     <*> areq textField "Address" Nothing
 
 currencyChoiceForm :: Html -> MForm Handler (FormResult NameAddress, Widget)
@@ -74,7 +75,7 @@ getHomeR = do
     vals <- lookupSession "vals"
     holdings <- return $ extractHoldings (getNameAddresses vals)
     balances <- liftIO $ extractBalances holdings
-    holdingTuples <- return $ zipWith (\h b -> (h, b)) holdings balances
+    holdingTuples <- return $ Data.List.zipWith (\h b -> (h, b)) holdings balances
     $(widgetFile "homepage")
 --    setSession "vals" $ (decodeUtf8 . DBL.toStrict . encode) getHoldings
 
@@ -84,6 +85,18 @@ postHomeR = do
   vals <- lookupSession "vals"
   case result of
     FormSuccess choice ->
-      setSession "vals" $ (decodeUtf8 . DBL.toStrict . encode) ([choice] ++ (getNameAddresses vals))
+      setSession "vals" $ (decodeUtf8 . DBL.toStrict . encode) ([choice] <> (getNameAddresses vals))
   redirect HomeR
   
+deleteHomeR :: Handler Html
+deleteHomeR = do
+  choice <- requireJsonBody :: Handler NameAddress
+  vals <- lookupSession "vals"
+  $(logInfo) $ pack $ show choice
+  $(logInfo) $ pack $ show $ getNameAddresses vals
+  setSession "vals" $
+    (decodeUtf8 . DBL.toStrict . encode)
+    (Data.List.filter
+      (\na -> ((toLower $ name choice) /= (name na)) || ((address choice /= (address na))))
+      (getNameAddresses vals))
+  redirect HomeR
