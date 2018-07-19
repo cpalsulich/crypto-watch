@@ -4,4 +4,5 @@ function deleteChoice(currency, address) {
     xhr.open("DELETE", url, true);
     xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
     xhr.send(JSON.stringify({name: currency, address: address}));
+    window.location.reload();
 }

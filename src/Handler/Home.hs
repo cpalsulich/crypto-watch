@@ -9,6 +9,7 @@ import Import
 import Data.List
 import Data.Map.Strict
 import Data.Aeson
+import Yesod.Form.Bootstrap4
 
 import qualified Data.ByteString.Lazy as DBL
 
@@ -62,8 +63,15 @@ extractBalances hs = sequence $ (fmap) (\h -> getHoldingBalance h) hs
 
 currencyChoiceAForm :: AForm Handler NameAddress
 currencyChoiceAForm = NameAddress
-    <$> areq (selectFieldList (Data.List.zipWith (\a b -> (a, b)) (Data.Map.Strict.keys optionMap) (Data.Map.Strict.keys optionMap))) "" Nothing
-    <*> areq textField "Address" Nothing
+    <$> areq (selectFieldList (Data.List.zipWith (\a b -> (a, b)) (Data.Map.Strict.keys optionMap) (Data.Map.Strict.keys optionMap))) (bfs ("" :: Text)) Nothing
+    <*> (areq textField
+         (FieldSettings {fsName = Nothing,
+                         fsAttrs = [("placeholder" :: Text, "Address" :: Text),
+                                    ("class" :: Text, "col-sm form-control" :: Text)],
+                         fsLabel = SomeMessage ("" :: Text),
+                         fsTooltip = Nothing,
+                         fsId = Nothing})
+          Nothing)
 
 currencyChoiceForm :: Html -> MForm Handler (FormResult NameAddress, Widget)
 currencyChoiceForm = renderTable currencyChoiceAForm

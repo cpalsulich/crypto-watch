@@ -27,4 +27,4 @@ getArkHolding addr
       getArkBalance :: IO (Maybe Float)
       getArkBalance = do
         r <- get ("https://explorer.ark.io:8443/api/accounts?address=" ++ (unpack addr))
-        return $ ((/10e6) . read . unpack) <$> (r ^? responseBody . key "account" . key "balance" . _String)
+        return $ ((/10e7) . read . unpack) <$> (r ^? responseBody . key "account" . key "balance" . _String)

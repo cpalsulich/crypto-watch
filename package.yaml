@@ -47,6 +47,7 @@ dependencies:
 - lens
 - lens-aeson
 - yesod-form
+- yesod-form-bootstrap4
 # The library contains all of our application code. The executable
 # defined below is just a thin wrapper.
 library:

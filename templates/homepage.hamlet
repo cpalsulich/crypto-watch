@@ -1,22 +1,25 @@
 <div class="container-fluid">
-  <h3>Add tracked currency 
+  <h3>Add tracked currency
   <form method=post action=@{HomeR} enctype=#{enctype}>
     ^{optionWidget}
-    <button>Submit
+    <button class="btn btn-primary">Submit
   <hr>
-  <table class="table">
-    <tr>
-      <th>Name
-      <th>Address
-      <th>Balance
-      <th>Delete    
-    $forall holdingTuple
-    <- holdingTuples
+  <h3>Balances
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
       <tr>
-        <td>#{getHoldingName $ fst holdingTuple}
-        <td>#{getHoldingAddress $ fst holdingTuple}
-        $maybe balance <- snd holdingTuple
-          <td>#{balance}
-        $nothing
-          <td>Balance not available
-        <td onclick="deleteChoice('#{getHoldingName $ fst holdingTuple}', '#{getHoldingAddress $ fst holdingTuple}')">X
+        <th>Name
+        <th>Address
+        <th>Balance
+        <th>Delete    
+      $forall holdingTuple
+      <- holdingTuples
+        <tr>
+          <td>#{getHoldingName $ fst holdingTuple}
+          <td>#{getHoldingAddress $ fst holdingTuple}
+          $maybe balance <- snd holdingTuple
+            <td>#{balance}
+          $nothing
+            <td>Balance not available
+          <td>
+            <button type="button" class="btn btn-danger" onclick="deleteChoice('#{getHoldingName $ fst holdingTuple}', '#{getHoldingAddress $ fst holdingTuple}')">Delete</button>
