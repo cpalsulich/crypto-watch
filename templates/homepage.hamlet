@@ -11,6 +11,7 @@
         <th>Name
         <th>Address
         <th>Balance
+        <th>Value    
         <th>Delete    
       $forall holdingTuple
       <- holdingTuples
@@ -21,5 +22,9 @@
             <td>#{balance}
           $nothing
             <td>Balance not available
+          $maybe tBalance <- (getTickerBalance ticker $ getHoldingName $ fst holdingTuple) (snd holdingTuple)
+            <td>#{tBalance}
+          $nothing
+            <td>Value not available
           <td>
             <button type="button" class="btn btn-danger" onclick="deleteChoice('#{getHoldingName $ fst holdingTuple}', '#{getHoldingAddress $ fst holdingTuple}')">Delete</button>
