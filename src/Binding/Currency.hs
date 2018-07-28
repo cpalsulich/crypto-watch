@@ -10,7 +10,7 @@ instance Show (IHolding) where
 
 class Holding a where
   getName :: a -> Text
-  getBalance :: a -> IO (Maybe Float)
+  getBalance :: a -> IO (Maybe Double)
   getAddress :: a -> Text
 
 packHolding :: Holding a => a -> IHolding

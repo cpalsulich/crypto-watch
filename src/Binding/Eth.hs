@@ -13,7 +13,7 @@ import Numeric
 
 data Eth = Eth
   { name :: Text,
-    balance :: IO (Maybe Float),
+    balance :: IO (Maybe Double),
     address :: Text
   }
 
@@ -37,7 +37,7 @@ getEthHolding addr
   = Eth { name = "Eth",
           balance = getEthBalance,
           address = addr }
-  where getEthBalance :: IO (Maybe Float)
+  where getEthBalance :: IO (Maybe Double)
         getEthBalance = do
           r <- post "https://mainnet.infura.io/" $ toJSON $ EthRequest { jsonrpc = "2.0",
                                                                          Binding.Eth.id = 1,

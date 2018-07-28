@@ -9,7 +9,6 @@ import Prelude as P
 import Data.Aeson
 import Data.List
 import Data.Map.Internal
-import Data.Time.Clock.POSIX
 import Import
 import Yesod.Form.Bootstrap4
 
@@ -19,6 +18,7 @@ import Binding.Currency
 import Binding.SessionHolding as BS
 
 import Binding.Ark (getArkHolding)
+import Binding.Bch (getBchHolding)
 import Binding.Btc (getBtcHolding)
 import Binding.Eth (getEthHolding)
 import Binding.Xrp (getXrpHolding)
@@ -35,7 +35,7 @@ fromJson = (decode P.. DBL.fromStrict P.. encodeUtf8)
 toJson :: ToJSON a => a -> Text
 toJson = (decodeUtf8 P.. DBL.toStrict P.. encode)
 
-getTickerBalance :: Maybe Ticker -> Text -> Maybe Float -> Maybe Float
+getTickerBalance :: Maybe Ticker -> Text -> Maybe Double -> Maybe Double
 getTickerBalance mTicker val mAmount = mTicker
   >>= (\x -> Just $ elems x)
   >>= (\currencies -> Data.List.find (\x -> (toLower val) == (pack P.. toLower P.. EC.symbol $ x)) currencies)
@@ -52,14 +52,15 @@ getHoldingName (MkHolding a) = getName a
 getHoldingAddress :: IHolding -> Text
 getHoldingAddress (MkHolding a) = getAddress a
 
-getHoldingBalance :: IHolding -> IO (Maybe Float)
+getHoldingBalance :: IHolding -> IO (Maybe Double)
 getHoldingBalance (MkHolding a) = getBalance a
 
 optionMap :: Map Text (Text -> IHolding)
 optionMap = Data.Map.Internal.fromList [("ark", (\addr -> packHolding $ getArkHolding addr)),
                                         ("eth", (\addr -> packHolding $ getEthHolding addr)),
                                         ("btc", (\addr -> packHolding $ getBtcHolding addr)),
-                                        ("xrp", (\addr -> packHolding $ getXrpHolding addr))]
+                                        ("xrp", (\addr -> packHolding $ getXrpHolding addr)),
+                                        ("bch", (\addr -> packHolding $ getBchHolding addr))]
 
 getHolding :: NameAddress -> IHolding
 getHolding na = optionMap ! (BS.name na) $ BS.address na
@@ -67,7 +68,7 @@ getHolding na = optionMap ! (BS.name na) $ BS.address na
 extractHoldings :: [NameAddress] -> [IHolding]
 extractHoldings nas = (fmap) getHolding nas
 
-extractBalances :: [IHolding] -> IO ([Maybe Float])
+extractBalances :: [IHolding] -> IO ([Maybe Double])
 extractBalances hs = sequence $ (fmap) (\h -> getHoldingBalance h) hs
 
 currencyChoiceAForm :: AForm Handler NameAddress

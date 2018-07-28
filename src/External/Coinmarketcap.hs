@@ -30,8 +30,8 @@ instance ToJSON TickerCurrency where
   toEncoding = genericToEncoding defaultOptions
 
 data TickerQuote = TickerQuote {
-  price :: Float,
-  percent_change_24h :: Float }
+  price :: Double,
+  percent_change_24h :: Double }
   deriving Generic
 
 instance FromJSON TickerQuote
