@@ -2,11 +2,13 @@
 module Binding.Bch where
 
 import Binding.Currency
-import Network.Wreq (responseBody, get)
+import Network.Wreq (responseBody)
 import Control.Exception as E
 import Control.Lens
 import Data.Aeson.Lens (key, _Double)
 import Data.Text
+
+import Common.Http (get)
 
 data Bch = Bch
   { name :: Text,
@@ -29,4 +31,3 @@ getBchHolding addr
       getBchBalance = do
         r <- get ("https://explorer.bitcoin.com/api/btc/addr/" ++ (unpack addr))
         return $ r ^? responseBody . key "balance" . _Double
---        $(logInfo) ("https://blockdozer.com/api/addr/bitcoincash:" ++ (unpack addr) ++ "/?noTxList=1")

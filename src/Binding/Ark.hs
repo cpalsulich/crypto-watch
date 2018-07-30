@@ -2,10 +2,12 @@
 module Binding.Ark where
 
 import Binding.Currency
-import Network.Wreq (responseBody, get)
 import Control.Lens
 import Data.Aeson.Lens (key, _String)
 import Data.Text
+import Network.Wreq (responseBody)
+
+import Common.Http (get)
 
 data Ark = Ark
   { name :: Text,

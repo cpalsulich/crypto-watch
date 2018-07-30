@@ -5,7 +5,9 @@ import Binding.Currency
 import Control.Lens
 import Data.Aeson.Lens (key, nth, _String)
 import Data.Text
-import Network.Wreq (responseBody, get)
+import Network.Wreq (responseBody)
+
+import Common.Http (get)
 
 data Xrp = Xrp
   { name :: Text,

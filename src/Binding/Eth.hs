@@ -7,9 +7,11 @@ import Control.Lens
 import Data.Aeson.Lens (key, _String)
 import Data.Text
 import GHC.Generics
-import Network.Wreq (responseBody, post)
+import Network.Wreq (responseBody)
 import Data.Aeson
 import Numeric
+
+import Common.Http (post)
 
 data Eth = Eth
   { name :: Text,
