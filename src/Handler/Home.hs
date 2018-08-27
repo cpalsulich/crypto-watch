@@ -42,6 +42,13 @@ getTickerBalance mTicker val mAmount = mTicker
   >>= (Data.Map.Internal.lookup $ unpack currency) P.. quotes
   >>= (\x -> maybe Nothing (\amount -> Just $ (price x) * amount) mAmount)
 
+getTickerPrice :: Maybe Ticker -> Text -> Maybe Double
+getTickerPrice mTicker val = mTicker
+  >>= (\x -> Just $ elems x)
+  >>= (\currencies -> Data.List.find (\x -> (toLower val) == (pack P.. toLower P.. EC.symbol $ x)) currencies)
+  >>= (Data.Map.Internal.lookup $ unpack currency) P.. quotes
+  >>= (\x -> Just $ price x)
+
 getNameAddresses :: Maybe Text -> [NameAddress]
 getNameAddresses Nothing = []
 getNameAddresses (Just jsonText) = maybe [] P.id $ fromJson jsonText

@@ -4,27 +4,35 @@
     ^{optionWidget}
     <button class="btn btn-primary">Submit
   <hr>
-  <h3>Balances
-  <div class="table-responsive">
-    <table class="table table-striped table-sm">
-      <tr>
-        <th>Name
-        <th>Address
-        <th>Balance
-        <th>Value    
-        <th>Delete    
-      $forall holdingTuple
-      <- holdingTuples
+  $if 0 == Data.List.length holdingTuples
+    <h4>Add a currency above
+  $else
+    <h3>Balances
+    <div class="table-responsive">
+      <table class="table table-striped table-sm">
         <tr>
-          <td>#{getHoldingName $ fst holdingTuple}
-          <td>#{getHoldingAddress $ fst holdingTuple}
-          $maybe balance <- snd holdingTuple
-            <td>#{balance}
-          $nothing
-            <td>Balance not available
-          $maybe tBalance <- (getTickerBalance ticker $ getHoldingName $ fst holdingTuple) (snd holdingTuple)
-            <td>#{tBalance}
-          $nothing
-            <td>Value not available
-          <td>
-            <button type="button" class="btn btn-danger" onclick="deleteChoice('#{getHoldingName $ fst holdingTuple}', '#{getHoldingAddress $ fst holdingTuple}')">Delete</button>
+          <th>Name
+          <th>Address
+          <th>Balance
+          <th>Price
+          <th>Value  
+          <th>Delete    
+        $forall holdingTuple
+        <- holdingTuples
+          <tr>
+            <td>#{getHoldingName $ fst holdingTuple}
+            <td>#{getHoldingAddress $ fst holdingTuple}
+            $maybe balance <- snd holdingTuple
+              <td>#{balance}
+            $nothing
+              <td>Balance not available
+            $maybe tPrice <- (getTickerPrice ticker $ getHoldingName $ fst holdingTuple)
+              <td>#{tPrice}
+            $nothing
+              <td>Price not available
+            $maybe tBalance <- (getTickerBalance ticker $ getHoldingName $ fst holdingTuple) (snd holdingTuple)
+              <td>#{tBalance}
+            $nothing
+              <td>Value not available
+            <td>
+              <button type="button" class="btn btn-danger" onclick="deleteChoice('#{getHoldingName $ fst holdingTuple}', '#{getHoldingAddress $ fst holdingTuple}')">Delete</button>
