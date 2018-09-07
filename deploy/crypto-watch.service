@@ -1,0 +1,9 @@
+[Service]
+ExecStart=/etc/crypto-watch/crypto-watch
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=crypto-watch
+
+[Install]
+WantedBy=multi-user.target

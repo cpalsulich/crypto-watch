@@ -27,11 +27,11 @@
             $nothing
               <td>Balance not available
             $maybe tPrice <- (getTickerPrice ticker $ getHoldingName $ fst holdingTuple)
-              <td>#{tPrice}
+              <td>$#{tPrice}
             $nothing
               <td>Price not available
             $maybe tBalance <- (getTickerBalance ticker $ getHoldingName $ fst holdingTuple) (snd holdingTuple)
-              <td>#{tBalance}
+              <td>$#{tBalance}
             $nothing
               <td>Value not available
             <td>

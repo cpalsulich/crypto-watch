@@ -6,10 +6,8 @@ import Control.Lens
 import Data.Aeson
 import Data.Aeson.Lens
 import Data.Map.Internal
-import Data.Text
 import GHC.Generics
 import Network.Wreq (responseBody, get)
-import Yesod.Core.Handler
 
 type Ticker = Map String TickerCurrency
 
