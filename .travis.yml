@@ -8,7 +8,7 @@ addons:
     packages:
     - libgmp-dev
   ssh_known_hosts:
-    - 45.79.2.80
+  - 45.79.2.80
 before_install:
 - openssl aes-256-cbc -K $encrypted_a95ce5826900_key -iv $encrypted_a95ce5826900_iv
   -in crypto-watch-deploy.enc -out ~\/.ssh/crypto-watch-deploy -d
@@ -16,8 +16,6 @@ before_install:
 - export PATH=$HOME/.local/bin:$PATH
 - travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar
   xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
-- openssl aes-256-cbc -K $encrypted_9e3557de08a3_key -iv $encrypted_9e3557de08a3_iv
-  -in crypto-watch-deploy.enc -out crypto-watch-deploy -d
 - eval "$(ssh-agent -s)"
 - cp scripts/crypto-watch-deploy ~/.ssh/crypto-watch-deploy
 - chmod 600 ~/.ssh/crypto-watch-deploy

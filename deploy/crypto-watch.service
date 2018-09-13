@@ -1,5 +1,5 @@
 [Service]
-ExecStart=/etc/crypto-watch/crypto-watch
+ExecStart=/usr/share/crypto-watch/crypto-watch
 Restart=always
 StandardOutput=syslog
 StandardError=syslog
