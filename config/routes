@@ -7,3 +7,4 @@
 /robots.txt RobotsR GET
 
 / HomeR GET POST DELETE
+/refreshSession RefreshSessionR POST

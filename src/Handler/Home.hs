@@ -6,16 +6,16 @@ module Handler.Home where
 
 import Prelude as P
 
-import Data.Aeson
+-- import Data.Aeson
 import Data.List
 import Data.Map.Internal
 import Import
 import Yesod.Form.Bootstrap4
 
-import qualified Data.ByteString.Lazy as DBL
-
 import Binding.Currency
 import Binding.SessionHolding as BS
+
+import Common.Util (getNameAddresses, toJson)
 
 import Binding.Ark (getArkHolding)
 import Binding.Bch (getBchHolding)
@@ -28,12 +28,6 @@ type NameAddresses = [NameAddress]
 
 currency :: Text
 currency = "USD"
-
-fromJson :: FromJSON a => Text -> Maybe a
-fromJson = (decode P.. DBL.fromStrict P.. encodeUtf8)
-
-toJson :: ToJSON a => a -> Text
-toJson = (decodeUtf8 P.. DBL.toStrict P.. encode)
 
 getTickerBalance :: Maybe Ticker -> Text -> Maybe Double -> Maybe Double
 getTickerBalance mTicker val mAmount = mTicker
@@ -48,10 +42,6 @@ getTickerPrice mTicker val = mTicker
   >>= (\currencies -> Data.List.find (\x -> (toLower val) == (pack P.. toLower P.. EC.symbol $ x)) currencies)
   >>= (Data.Map.Internal.lookup $ unpack currency) P.. quotes
   >>= (\x -> Just $ price x)
-
-getNameAddresses :: Maybe Text -> [NameAddress]
-getNameAddresses Nothing = []
-getNameAddresses (Just jsonText) = maybe [] P.id $ fromJson jsonText
 
 getHoldingName :: IHolding -> Text
 getHoldingName (MkHolding a) = getName a
@@ -76,7 +66,7 @@ extractHoldings :: [NameAddress] -> [IHolding]
 extractHoldings nas = (fmap) getHolding nas
 
 extractBalances :: [IHolding] -> IO ([Maybe Double])
-extractBalances hs = sequence $ (fmap) (\h -> getHoldingBalance h) hs
+extractBalances hs = traverse (\h -> getHoldingBalance h) hs
 
 currencyChoiceAForm :: AForm Handler NameAddress
 currencyChoiceAForm
@@ -108,23 +98,6 @@ getHomeR = do
     ticker <- liftIO getTicker
     holdingTuples <- return $ Data.List.zipWith (\h b -> (h, b)) holdings balances
     $(widgetFile "homepage")
---    where
---      extractTimestamp :: Maybe Text -> Integer
---      extractTimestamp val = (read P.. unpack P.. maybe "0" P.id) val
---      getTickerData :: Maybe Text -> Integer -> Integer  -> HandlerFor App (Maybe Ticker)
---      getTickerData tickerJson sessionTimestamp currentTimestamp =
---        if 300 < currentTimestamp - sessionTimestamp
---          then do updateTickerSessions currentTimestamp >> return $ maybe Nothing fromJson tickerJson
---          else do return $ maybe Nothing fromJson tickerJson
---      updateTickerSessions :: Integer -> HandlerFor App ()
---      updateTickerSessions currentTimestamp = do
---        ticker <- 
---        setSession "ticker" $ toJson ticker
---        setSession "tickerTimestamp" $ pack $ show $ currentTimestamp
---    sessionTimestamp <- extractTimestamp <$> lookupSession "tickerTimestamp"
---    currentTimestamp <- liftIO $ (toInteger P.. round) <$> getPOSIXTime
-    
---    ticker <- getTickerData
 
 postHomeR :: Handler Html
 postHomeR = do
@@ -132,7 +105,7 @@ postHomeR = do
   vals <- lookupSession "vals"
   case result of
     FormSuccess choice ->
-      setSession "vals" $ (decodeUtf8 P.. DBL.toStrict P.. encode) ([choice] <> (getNameAddresses vals))
+      setSession "vals" $ toJson ([choice] <> (getNameAddresses vals))
     FormMissing ->
       redirect HomeR
     FormFailure _ ->
@@ -146,7 +119,7 @@ deleteHomeR = do
   vals <- lookupSession "vals"
   $(logInfo) $ pack $ show $ getNameAddresses vals
   setSession "vals" $
-    (decodeUtf8 P.. DBL.toStrict P.. encode)
+    toJson
     (Data.List.filter
       (\na -> ((toLower $ BS.name choice) /= (BS.name na)) || ((address choice /= (address na))))
       (getNameAddresses vals))
