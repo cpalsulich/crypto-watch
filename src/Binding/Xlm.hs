@@ -4,10 +4,10 @@ module Binding.Xlm where
 import Binding.Currency
 import Control.Lens
 import Control.Monad
-import Data.Aeson.Lens (_Array, key, _Object, _String)
+import Data.Aeson.Lens (_Array, key, _String)
 import Data.ByteString.Lazy
 import Data.Text 
-import Data.Vector (find, fromList)
+import Data.Vector (find)
 import Network.Wreq (Response, responseBody)
 
 import Common.Http (get)

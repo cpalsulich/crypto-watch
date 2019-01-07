@@ -1,7 +1,6 @@
 module Common.Http where
 
 import Control.Lens
-import Control.Lens.Combinators
 import Data.ByteString.Lazy.Internal
 import Network.Wreq (getWith,
                      postWith,
