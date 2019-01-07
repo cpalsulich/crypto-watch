@@ -66,7 +66,7 @@ extractHoldings :: [NameAddress] -> [IHolding]
 extractHoldings nas = (fmap) getHolding nas
 
 extractBalances :: [IHolding] -> IO ([Maybe Double])
-extractBalances hs = traverse (\h -> getHoldingBalance h) hs
+extractBalances hs = mapConcurrently (\h -> getHoldingBalance h) hs
 
 currencyChoiceAForm :: AForm Handler NameAddress
 currencyChoiceAForm
