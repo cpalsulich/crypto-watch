@@ -1,9 +1,10 @@
 [Service]
-ExecStart=/usr/share/crypto-watch/crypto-watch
+WorkingDirectory=/home/crypto/crypto-watch
+ExecStart=/home/crypto/crypto-watch/crypto-watch
 Restart=always
 StandardOutput=syslog
 StandardError=syslog
-SyslogIdentifier=crypto-watch
+SyslogIdentifier=yesod-sample
 
 [Install]
 WantedBy=multi-user.target
